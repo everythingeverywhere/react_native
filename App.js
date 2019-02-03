@@ -11,6 +11,7 @@ import {StyleSheet, Text, View, TextInput, Button} from 'react-native';
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from "./src/components/PlaceList/PlaceList";
+import placeImage from "./src/assets/animal-beach-bird-66258.jpg"
 
 export default class App extends Component {
 
@@ -23,7 +24,10 @@ export default class App extends Component {
       return {
           places: prevState.places.concat({
             key: Math.random(),
-            value: placeName
+            name: placeName,
+            image: {
+              uri: 'https://images.pexels.com/photos/386025/pexels-photo-386025.jpeg?cs=srgb&dl=adventure-beach-blue-386025.jpg&fm=jpg'
+            }
           })
       }
     });

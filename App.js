@@ -21,25 +21,28 @@ export default class App extends Component {
   placeAddedHandler = placeName => {
     this.setState( prevState => {
       return {
-          places: prevState.places.concat(placeName)
+          places: prevState.places.concat({
+            key: Math.random(),
+            value: placeName
+          })
       }
     });
   }; 
-
-  placeDeletedHandler = index => {
+// if key is equal to the key in the new array don't include it hence deleting it.
+  placeDeletedHandler = key => {
     this.setState(prevState => {
       return {
-        places: prevState.places.filter((place, i) => {
-          return i !== index;
+        places: prevState.places.filter(place => {
+          return place.key !== key;
         })
       }
     })
-  }
+  };
     
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.large}>{this.state.places}</Text>
+        <Text style={styles.large}>{this.state.places.value}</Text>
         <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
         <PlaceList 
           places={this.state.places} 

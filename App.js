@@ -11,12 +11,14 @@ import {StyleSheet, Text, View, TextInput, Button} from 'react-native';
 
 import PlaceInput from './src/components/PlaceInput/PlaceInput';
 import PlaceList from "./src/components/PlaceList/PlaceList";
-import placeImage from "./src/assets/animal-beach-bird-66258.jpg"
+import PlaceDetail from "./src/components/PlaceDetail/PlaceDetail";
+import placeImage from "./src/assets/animal-beach-bird-66258.jpg";
 
 export default class App extends Component {
 
   state = {
     places: [],
+    selectedPlace: null
   }
 
   placeAddedHandler = placeName => {
@@ -32,12 +34,28 @@ export default class App extends Component {
       }
     });
   }; 
-// if key is equal to the key in the new array don't include it hence deleting it.
-  placeDeletedHandler = key => {
+  placeDeletedHandler = () => {
     this.setState(prevState => {
       return {
         places: prevState.places.filter(place => {
-          return place.key !== key;
+          return place.key !== prevState.selectedPlace.key;
+        }),
+        selectedPlace: null
+      };
+    });
+  };
+
+  modalClosedHandler = () => {
+    this.setState({
+      selectedPlace: null
+    });
+  } 
+// if key is equal to the key in the new array don't include it hence deleting it.
+  placeSelectedHandler = key => {
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.find(place => {
+          return place.key == key; // see if the key I receive is the same as in the placeSelectedHandler if so I want it.
         })
       }
     })
@@ -46,11 +64,16 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <PlaceDetail 
+          selectedPlace={this.state.selectedPlace} 
+          onItemDeleted={this.placeDeletedHandler}
+          onModalClosed={this.modalClosedHandler}
+        />
         <Text style={styles.large}>{this.state.places.value}</Text>
         <PlaceInput onPlaceAdded={this.placeAddedHandler}/>
         <PlaceList 
           places={this.state.places} 
-          onItemDeleted={this.placeDeletedHandler} 
+          onItemSelected={this.placeSelectedHandler} 
         />
     </View>
     );
